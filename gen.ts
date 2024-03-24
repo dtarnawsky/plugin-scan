@@ -52,12 +52,9 @@ const match = {
 
 };
 
-interface Privacy {
-    plugin: string;
-    category: string;
-}
+
 const txt: string = readFileSync('./plugins.txt', 'utf-8');
-const privacy: Privacy[] = [];
+const privacy = {};
 const p = JSON.parse(readFileSync('./package.json', 'utf-8'));
 p.dependencies = {};
 for (const item of txt.split('\n')) {
@@ -68,7 +65,10 @@ for (const item of txt.split('\n')) {
         if (t !== null) {
             for (const key of Object.keys(match)) {
                 if (t.includes(key)) {
-                    privacy.push({ plugin: item, category: match[key] });
+                    if (!privacy[match[key]]) {
+                        privacy[match[key]] = [];
+                    }
+                    privacy[match[key]].push(item);
                     console.log(`${item}=${key}`);
                 }
             }
