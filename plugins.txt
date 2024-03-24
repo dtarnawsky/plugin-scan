@@ -382,7 +382,6 @@ capacitor-open-app-settings
 capacitor-pass-to-wallet
 capacitor-paytm-allinone
 capacitor-plugin-app-tracking-transparency
-capacitor-plugin-background-mode
 capacitor-plugin-biometrics
 capacitor-plugin-bluetooth-print
 capacitor-plugin-camera

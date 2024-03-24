@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import util from 'util';
 import { execSync } from 'child_process';
 import { getRunOutput } from './utils';
@@ -52,15 +52,18 @@ const match = {
 
 };
 
-
 const txt: string = readFileSync('./plugins.txt', 'utf-8');
-const privacy = {};
+let privacy = {};
 const p = JSON.parse(readFileSync('./package.json', 'utf-8'));
 p.dependencies = {};
+if (existsSync('privacy.json')) {
+    const txt = readFileSync('privacy.json', 'utf8');
+    privacy = JSON.parse(txt);
+}
 for (const item of txt.split('\n')) {
     try {
         //console.log(item);
-        execSync(`npm i ${item}`);
+        await getRunOutput(`npm i ${item}`, '.');
         const t = await getRunOutput(`sh find.sh node_modules`, '.');
         if (t !== null) {
             for (const key of Object.keys(match)) {
@@ -68,7 +71,9 @@ for (const item of txt.split('\n')) {
                     if (!privacy[match[key]]) {
                         privacy[match[key]] = [];
                     }
-                    privacy[match[key]].push(item);
+                    if (!privacy[match[key]].includes(item)) {
+                        privacy[match[key]].push(item);
+                    }
                     console.log(`${item}=${key}`);
                 }
             }
@@ -76,8 +81,9 @@ for (const item of txt.split('\n')) {
             writeFileSync('privacy.json', JSON.stringify(privacy, null, 2));
             //console.log(t);
         }
-    } finally {
-        execSync(`npm uninstall ${item}`);
+        await getRunOutput(`npm uninstall ${item}`, '.');
+    } catch (e) {
+        console.error(`${item} error`, e);
     }
 }
 

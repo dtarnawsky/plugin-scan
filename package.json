@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "bun gen.ts"
+    "start": "bun gen.ts",
+    "build:nativescript": "node --experimental-import-meta-resolve node_modules/.bin/build-nativescript",
+    "build:mobile": "npm-run-all build build:nativescript",
+    "dev:nativescript": "dev-nativescript"
   },
   "author": "Damian Tarnawsky",
   "license": "ISC",
