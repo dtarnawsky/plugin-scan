@@ -1,0 +1,14 @@
+{
+  "name": "cs-all-plugins",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "bun gen.ts"
+  },
+  "author": "Damian Tarnawsky",
+  "license": "ISC",
+  "dependencies": {
+    "util": "^0.12.5"
+  }
+}
